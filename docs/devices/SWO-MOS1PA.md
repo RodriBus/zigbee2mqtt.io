@@ -1,60 +1,61 @@
 ---
 title: "Swann SWO-MOS1PA control via MQTT"
-description: "Integrate your Swann SWO-MOS1PA via Zigbee2mqtt with whatever smart home
- infrastructure you are using without the vendors bridge or gateway."
+description: "Integrate your Swann SWO-MOS1PA via Zigbee2MQTT with whatever smart home infrastructure you are using without the vendor's bridge or gateway."
+addedAt: 2020-06-08T17:35:15Z
+pageClass: device-page
 ---
 
-*To contribute to this page, edit the following
-[file](https://github.com/Koenkk/zigbee2mqtt.io/blob/master/docs/devices/SWO-MOS1PA.md)*
+<!-- !!!! -->
+<!-- ATTENTION: This file is auto-generated through docgen! -->
+<!-- You can only edit the "Notes"-Section between the two comment lines "Notes BEGIN" and "Notes END". -->
+<!-- Do not use h1 or h2 heading within "## Notes"-Section. -->
+<!-- !!!! -->
 
 # Swann SWO-MOS1PA
 
+|     |     |
+|-----|-----|
 | Model | SWO-MOS1PA  |
-| Vendor  | Swann  |
+| Vendor  | [Swann](/supported-devices/#v=Swann)  |
 | Description | Motion and temperature sensor |
-| Supports | occupancy |
-| Picture | ![Swann SWO-MOS1PA](../images/devices/SWO-MOS1PA.jpg) |
+| Exposes | occupancy, battery_low, tamper, linkquality |
+| Picture | ![Swann SWO-MOS1PA](https://www.zigbee2mqtt.io/images/devices/SWO-MOS1PA.jpg) |
 
+
+<!-- Notes BEGIN: You can edit here. Add "## Notes" headline if not already present. -->
 ## Notes
 
 
 ### Temperature not supported
 Device is listed as having temperature detection. This feature is still being investigated.
+<!-- Notes END: Do not edit below this line -->
 
 
-## Manual Home Assistant configuration
-Although Home Assistant integration through [MQTT discovery](../integration/home_assistant) is preferred,
-manual integration is possible with the following configuration:
 
+## Exposes
 
-{% raw %}
-```yaml
-binary_sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    payload_on: true
-    payload_off: false
-    value_template: "{{ value_json.occupancy }}"
-    device_class: "motion"
+### Occupancy (binary)
+Indicates whether the device detected occupancy.
+Value can be found in the published state on the `occupancy` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+If value equals `true` occupancy is ON, if `false` OFF.
 
-binary_sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    payload_on: true
-    payload_off: false
-    value_template: "{{ value_json.battery_low}}"
-    device_class: "battery"
+### Battery_low (binary)
+Indicates if the battery of this device is almost empty.
+Value can be found in the published state on the `battery_low` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+If value equals `true` battery_low is ON, if `false` OFF.
 
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    icon: "mdi:signal"
-    unit_of_measurement: "lqi"
-    value_template: "{{ value_json.linkquality }}"
-```
-{% endraw %}
+### Tamper (binary)
+Indicates whether the device is tampered.
+Value can be found in the published state on the `tamper` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+If value equals `true` tamper is ON, if `false` OFF.
 
+### Linkquality (numeric)
+Link quality (signal strength).
+Value can be found in the published state on the `linkquality` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+The minimal value is `0` and the maximum value is `255`.
+The unit of this value is `lqi`.
 

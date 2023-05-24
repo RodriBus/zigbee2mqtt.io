@@ -1,58 +1,65 @@
 ---
 title: "TuYa TYZS1L control via MQTT"
-description: "Integrate your TuYa TYZS1L via Zigbee2mqtt with whatever smart home
- infrastructure you are using without the vendors bridge or gateway."
+description: "Integrate your TuYa TYZS1L via Zigbee2MQTT with whatever smart home infrastructure you are using without the vendor's bridge or gateway."
+addedAt: 2020-07-20T23:08:11Z
+pageClass: device-page
 ---
 
-*To contribute to this page, edit the following
-[file](https://github.com/Koenkk/zigbee2mqtt.io/blob/master/docs/devices/TYZS1L.md)*
+<!-- !!!! -->
+<!-- ATTENTION: This file is auto-generated through docgen! -->
+<!-- You can only edit the "Notes"-Section between the two comment lines "Notes BEGIN" and "Notes END". -->
+<!-- Do not use h1 or h2 heading within "## Notes"-Section. -->
+<!-- !!!! -->
 
 # TuYa TYZS1L
 
+|     |     |
+|-----|-----|
 | Model | TYZS1L  |
-| Vendor  | TuYa  |
-| Description | Zigbee LED Strip controller RGB + CCT or RGBW |
-| Supports | on/off, brightness, color temperature, color xy |
-| Picture | ![TuYa TYZS1L](../images/devices/TYZS1L.jpg) |
+| Vendor  | [TuYa](/supported-devices/#v=TuYa)  |
+| Description | Led strip controller HSB |
+| Exposes | light (state, color_hs), linkquality |
+| Picture | ![TuYa TYZS1L](https://www.zigbee2mqtt.io/images/devices/TYZS1L.jpg) |
 
+
+<!-- Notes BEGIN: You can edit here. Add "## Notes" headline if not already present. -->
 ## Notes
 
 
-### Device type specific configuration
-*[How to use device type specific configuration](../information/configuration.md)*
+### Limitations
+This device has various limitations:
+- Changing brightness is not supported
+- On/off and color transition is not supported
+- Color can only be set via hue/saturation, example payload `{"color":{"h": 360, "s": 100}}`.
+<!-- Notes END: Do not edit below this line -->
 
 
-* `transition`: Controls the transition time (in seconds) of on/off, brightness,
-color temperature (if applicable) and color (if applicable) changes. Defaults to `0` (no transition).
-Note that this value is overridden if a `transition` value is present in the MQTT command payload.
+## Options
+*[How to use device type specific configuration](../guide/configuration/devices-groups.md#specific-device-options)*
+
+* `state_action`: State actions will also be published as 'action' when true (default false). The value must be `true` or `false`
+
+* `color_sync`: When enabled colors will be synced, e.g. if the light supports both color x/y and color temperature a conversion from color x/y to color temperature will be done when setting the x/y color (default true). The value must be `true` or `false`
 
 
-## Manual Home Assistant configuration
-Although Home Assistant integration through [MQTT discovery](../integration/home_assistant) is preferred,
-manual integration is possible with the following configuration:
+## Exposes
 
+### Light 
+This light supports the following features: `state`, `color_hs`.
+- `state`: To control the state publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/set` with payload `{"state": "ON"}`, `{"state": "OFF"}` or `{"state": "TOGGLE"}`. To read the state send a message to `zigbee2mqtt/FRIENDLY_NAME/get` with payload `{"state": ""}`.
+- `color_hs`: To control the hue/saturation (color) publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/set` with payload `{"color": {"hue": HUE, "saturation": SATURATION}}` (e.g. `{"color":{"hue":360,"saturation":100}}`). To read the hue/saturation send a message to `zigbee2mqtt/FRIENDLY_NAME/get` with payload `{"color":{"hue":"","saturation":""}}`. Alternatively it is possible to set the hue/saturation via:
+  - HSB space (hue, saturation, brightness): `{"color": {"h": H, "s": S, "b": B}}` e.g. `{"color":{"h":360,"s":100,"b":100}}` or `{"color": {"hsb": "H,S,B"}}` e.g. `{"color":{"hsb":"360,100,100"}}`
+  - HSV space (hue, saturation, value):`{"color": {"h": H, "s": S, "v": V}}` e.g. `{"color":{"h":360,"s":100,"v":100}}` or `{"color": {"hsv": "H,S,V"}}` e.g. `{"color":{"hsv":"360,100,100"}}`
+  - HSL space (hue, saturation, lightness)`{"color": {"h": H, "s": S, "l": L}}` e.g. `{"color":{"h":360,"s":100,"l":100}}` or `{"color": {"hsl": "H,S,L"}}` e.g. `{"color":{"hsl":"360,100,100"}}`
 
-{% raw %}
-```yaml
-light:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    brightness: true
-    color_temp: true
-    xy: true
-    schema: "json"
-    command_topic: "zigbee2mqtt/<FRIENDLY_NAME>/set"
-    brightness_scale: 254
+#### Transition
+For all of the above mentioned features it is possible to do a transition of the value over time. To do this add an additional property `transition` to the payload which is the transition time in seconds.
+Examples: `{"brightness":156,"transition":3}`, `{"color_temp":241,"transition":1}`.
 
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    icon: "mdi:signal"
-    unit_of_measurement: "lqi"
-    value_template: "{{ value_json.linkquality }}"
-```
-{% endraw %}
-
+### Linkquality (numeric)
+Link quality (signal strength).
+Value can be found in the published state on the `linkquality` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+The minimal value is `0` and the maximum value is `255`.
+The unit of this value is `lqi`.
 

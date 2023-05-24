@@ -1,20 +1,28 @@
 ---
 title: "Xiaomi QBKG22LM control via MQTT"
-description: "Integrate your Xiaomi QBKG22LM via Zigbee2mqtt with whatever smart home
- infrastructure you are using without the vendors bridge or gateway."
+description: "Integrate your Xiaomi QBKG22LM via Zigbee2MQTT with whatever smart home infrastructure you are using without the vendor's bridge or gateway."
+addedAt: 2020-06-10T16:45:59Z
+pageClass: device-page
 ---
 
-*To contribute to this page, edit the following
-[file](https://github.com/Koenkk/zigbee2mqtt.io/blob/master/docs/devices/QBKG22LM.md)*
+<!-- !!!! -->
+<!-- ATTENTION: This file is auto-generated through docgen! -->
+<!-- You can only edit the "Notes"-Section between the two comment lines "Notes BEGIN" and "Notes END". -->
+<!-- Do not use h1 or h2 heading within "## Notes"-Section. -->
+<!-- !!!! -->
 
 # Xiaomi QBKG22LM
 
+|     |     |
+|-----|-----|
 | Model | QBKG22LM  |
-| Vendor  | Xiaomi  |
+| Vendor  | [Xiaomi](/supported-devices/#v=Xiaomi)  |
 | Description | Aqara D1 2 gang smart wall switch (no neutral wire) |
-| Supports | on/off, action, power measurement |
-| Picture | ![Xiaomi QBKG22LM](../images/devices/QBKG22LM.jpg) |
+| Exposes | switch (state), action, operation_mode, linkquality |
+| Picture | ![Xiaomi QBKG22LM](https://www.zigbee2mqtt.io/images/devices/QBKG22LM.jpg) |
 
+
+<!-- Notes BEGIN: You can edit here. Add "## Notes" headline if not already present. -->
 ## Notes
 
 
@@ -30,51 +38,60 @@ devices:
     legacy: false
 ```
 
+### Debounce
+It is recommended to not use the `debounce` option for this device since this will prevent the `single` and `hold_release` actions from being sent.
 
 ### Pairing
 Press and hold the button on the device for +- 10 seconds
 (until the blue light starts blinking and stops blinking), release and wait.
 
+You may have to unpair the switch from an existing coordinator before the pairing process will start.
+If you can't do this, try to remove battery (if it has one), push the button (to completely discharge device), place the battery back and try pairing again.
+<!-- Notes END: Do not edit below this line -->
 
-## Manual Home Assistant configuration
-Although Home Assistant integration through [MQTT discovery](../integration/home_assistant) is preferred,
-manual integration is possible with the following configuration:
+
+## Options
+*[How to use device type specific configuration](../guide/configuration/devices-groups.md#specific-device-options)*
+
+* `legacy`: Set to false to disable the legacy integration (highly recommended), will change structure of the published payload (default true). The value must be `true` or `false`
 
 
-{% raw %}
-```yaml
-switch:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    payload_off: "OFF"
-    payload_on: "ON"
-    value_template: "{{ value_json.state }}"
-    command_topic: "zigbee2mqtt/<FRIENDLY_NAME>/set"
+## Exposes
 
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    icon: "mdi:toggle-switch"
-    value_template: "{{ value_json.click }}"
+### Switch (left endpoint)
+The current state of this switch is in the published state under the `state_left` property (value is `ON` or `OFF`).
+To control this switch publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/set` with payload `{"state_left": "ON"}`, `{"state_left": "OFF"}` or `{"state_left": "TOGGLE"}`.
+To read the current state of this switch publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/get` with payload `{"state_left": ""}`.
 
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    unit_of_measurement: "°C"
-    device_class: "temperature"
-    value_template: "{{ value_json.temperature }}"
+### Switch (right endpoint)
+The current state of this switch is in the published state under the `state_right` property (value is `ON` or `OFF`).
+To control this switch publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/set` with payload `{"state_right": "ON"}`, `{"state_right": "OFF"}` or `{"state_right": "TOGGLE"}`.
+To read the current state of this switch publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/get` with payload `{"state_right": ""}`.
 
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    icon: "mdi:signal"
-    unit_of_measurement: "lqi"
-    value_template: "{{ value_json.linkquality }}"
-```
-{% endraw %}
+### Action (enum)
+Triggered action (e.g. a button click).
+Value can be found in the published state on the `action` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+The possible values are: `release_left`, `release_right`, `release_both`, `double_left`, `double_right`, `single_left`, `single_right`, `hold_release_left`, `hold_release_left`.
 
+### Operation_mode (enum, left endpoint)
+Operation mode for left button.
+Value can be found in the published state on the `operation_mode_left` property.
+To read (`/get`) the value publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/get` with payload `{"operation_mode_left": ""}`.
+To write (`/set`) a value publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/set` with payload `{"operation_mode_left": NEW_VALUE}`.
+The possible values are: `control_left_relay`, `control_right_relay`, `decoupled`.
+
+### Operation_mode (enum, right endpoint)
+Operation mode for right button.
+Value can be found in the published state on the `operation_mode_right` property.
+To read (`/get`) the value publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/get` with payload `{"operation_mode_right": ""}`.
+To write (`/set`) a value publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/set` with payload `{"operation_mode_right": NEW_VALUE}`.
+The possible values are: `control_left_relay`, `control_right_relay`, `decoupled`.
+
+### Linkquality (numeric)
+Link quality (signal strength).
+Value can be found in the published state on the `linkquality` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+The minimal value is `0` and the maximum value is `255`.
+The unit of this value is `lqi`.
 

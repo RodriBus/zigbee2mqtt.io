@@ -1,20 +1,28 @@
 ---
 title: "Nue / 3A HGZB-045 control via MQTT"
-description: "Integrate your Nue / 3A HGZB-045 via Zigbee2mqtt with whatever smart home
- infrastructure you are using without the vendors bridge or gateway."
+description: "Integrate your Nue / 3A HGZB-045 via Zigbee2MQTT with whatever smart home infrastructure you are using without the vendor's bridge or gateway."
+addedAt: 2019-07-22T20:08:17Z
+pageClass: device-page
 ---
 
-*To contribute to this page, edit the following
-[file](https://github.com/Koenkk/zigbee2mqtt.io/blob/master/docs/devices/HGZB-045.md)*
+<!-- !!!! -->
+<!-- ATTENTION: This file is auto-generated through docgen! -->
+<!-- You can only edit the "Notes"-Section between the two comment lines "Notes BEGIN" and "Notes END". -->
+<!-- Do not use h1 or h2 heading within "## Notes"-Section. -->
+<!-- !!!! -->
 
 # Nue / 3A HGZB-045
 
+|     |     |
+|-----|-----|
 | Model | HGZB-045  |
-| Vendor  | Nue / 3A  |
+| Vendor  | [Nue / 3A](/supported-devices/#v=Nue%20%2F%203A)  |
 | Description | Smart 4 key scene wall switch |
-| Supports | on/off, click |
-| Picture | ![Nue / 3A HGZB-045](../images/devices/HGZB-045.jpg) |
+| Exposes | action, switch (state), linkquality |
+| Picture | ![Nue / 3A HGZB-045](https://www.zigbee2mqtt.io/images/devices/HGZB-045.jpg) |
 
+
+<!-- Notes BEGIN: You can edit here. Add "## Notes" headline if not already present. -->
 ## Notes
 
 
@@ -29,39 +37,32 @@ devices:
     friendly_name: my_device
     legacy: false
 ```
+<!-- Notes END: Do not edit below this line -->
 
 
-## Manual Home Assistant configuration
-Although Home Assistant integration through [MQTT discovery](../integration/home_assistant) is preferred,
-manual integration is possible with the following configuration:
+## Options
+*[How to use device type specific configuration](../guide/configuration/devices-groups.md#specific-device-options)*
+
+* `legacy`: Set to false to disable the legacy integration (highly recommended), will change structure of the published payload (default true). The value must be `true` or `false`
 
 
-{% raw %}
-```yaml
-switch:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    payload_off: "OFF"
-    payload_on: "ON"
-    value_template: "{{ value_json.state }}"
-    command_topic: "zigbee2mqtt/<FRIENDLY_NAME>/set"
+## Exposes
 
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    icon: "mdi:toggle-switch"
-    value_template: "{{ value_json.click }}"
+### Action (enum)
+Triggered action (e.g. a button click).
+Value can be found in the published state on the `action` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+The possible values are: `recall_*`.
 
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    icon: "mdi:signal"
-    unit_of_measurement: "lqi"
-    value_template: "{{ value_json.linkquality }}"
-```
-{% endraw %}
+### Switch 
+The current state of this switch is in the published state under the `state` property (value is `ON` or `OFF`).
+To control this switch publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/set` with payload `{"state": "ON"}`, `{"state": "OFF"}` or `{"state": "TOGGLE"}`.
+To read the current state of this switch publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/get` with payload `{"state": ""}`.
 
+### Linkquality (numeric)
+Link quality (signal strength).
+Value can be found in the published state on the `linkquality` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+The minimal value is `0` and the maximum value is `255`.
+The unit of this value is `lqi`.
 

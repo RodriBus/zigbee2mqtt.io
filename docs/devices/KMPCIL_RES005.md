@@ -1,129 +1,108 @@
 ---
 title: "KMPCIL KMPCIL_RES005 control via MQTT"
-description: "Integrate your KMPCIL KMPCIL_RES005 via Zigbee2mqtt with whatever smart home
- infrastructure you are using without the vendors bridge or gateway."
+description: "Integrate your KMPCIL KMPCIL_RES005 via Zigbee2MQTT with whatever smart home infrastructure you are using without the vendor's bridge or gateway."
+addedAt: 2020-06-29T17:33:31Z
+pageClass: device-page
 ---
 
-*To contribute to this page, edit the following
-[file](https://github.com/Koenkk/zigbee2mqtt.io/blob/master/docs/devices/KMPCIL_RES005.md)*
+<!-- !!!! -->
+<!-- ATTENTION: This file is auto-generated through docgen! -->
+<!-- You can only edit the "Notes"-Section between the two comment lines "Notes BEGIN" and "Notes END". -->
+<!-- Do not use h1 or h2 heading within "## Notes"-Section. -->
+<!-- !!!! -->
 
 # KMPCIL KMPCIL_RES005
 
+|     |     |
+|-----|-----|
 | Model | KMPCIL_RES005  |
-| Vendor  | KMPCIL  |
+| Vendor  | [KMPCIL](/supported-devices/#v=KMPCIL)  |
 | Description | Environment sensor |
-| Supports | battery, temperature, humidity, pressure, illuminance, occupancy, switch |
-| Picture | ![KMPCIL KMPCIL_RES005](../images/devices/KMPCIL_RES005.jpg) |
-
-## Notes
+| Exposes | battery, temperature, humidity, pressure, illuminance, illuminance_lux, occupancy, switch (state), linkquality |
+| Picture | ![KMPCIL KMPCIL_RES005](https://www.zigbee2mqtt.io/images/devices/KMPCIL_RES005.jpg) |
 
 
-### Device type specific configuration
-*[How to use device type specific configuration](../information/configuration.md)*
+<!-- Notes BEGIN: You can edit here. Add "## Notes" headline if not already present. -->
 
 
-* `illuminance_lux_precision`: Controls the precision of `illuminance_lux` values, e.g. `0` or `1`; default `1`.
-To control the precision based on the illuminance_lux value set it to e.g. `{1000: 0, 100: 1}`,
-when illuminance_lux >= 1000 precision will be 0, when illuminance_lux >= 100 precision will be 1.
+<!-- Notes END: Do not edit below this line -->
 
 
-* `illuminance_lux_calibration`: Allows to manually calibrate illuminance values,
-e.g. `95` would take 95% to the illuminance reported by the device; default `100`.
+## Options
+*[How to use device type specific configuration](../guide/configuration/devices-groups.md#specific-device-options)*
+
+* `temperature_precision`: Number of digits after decimal point for temperature, takes into effect on next report of device. The value must be a number with a minimum value of `0` and with a with a maximum value of `3`
+
+* `temperature_calibration`: Calibrates the temperature value (absolute offset), takes into effect on next report of device. The value must be a number.
+
+* `humidity_precision`: Number of digits after decimal point for humidity, takes into effect on next report of device. The value must be a number with a minimum value of `0` and with a with a maximum value of `3`
+
+* `humidity_calibration`: Calibrates the humidity value (absolute offset), takes into effect on next report of device. The value must be a number.
+
+* `pressure_precision`: Number of digits after decimal point for pressure, takes into effect on next report of device. The value must be a number with a minimum value of `0` and with a with a maximum value of `3`
+
+* `pressure_calibration`: Calibrates the pressure value (absolute offset), takes into effect on next report of device. The value must be a number.
+
+* `illuminance_calibration`: Calibrates the illuminance value (percentual offset), takes into effect on next report of device. The value must be a number.
+
+* `illuminance_lux_calibration`: Calibrates the illuminance_lux value (percentual offset), takes into effect on next report of device. The value must be a number.
 
 
-* `temperature_precision`: Controls the precision of `temperature` values,
-e.g. `0`, `1` or `2`; default `2`.
-To control the precision based on the temperature value set it to e.g. `{30: 0, 10: 1}`,
-when temperature >= 30 precision will be 0, when temperature >= 10 precision will be 1.
-* `temperature_calibration`: Allows to manually calibrate temperature values,
-e.g. `1` would add 1 degree to the temperature reported by the device; default `0`.
+## Exposes
 
+### Battery (numeric)
+Remaining battery in %, can take up to 24 hours before reported..
+Value can be found in the published state on the `battery` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+The minimal value is `0` and the maximum value is `100`.
+The unit of this value is `%`.
 
-* `humidity_precision`: Controls the precision of `humidity` values, e.g. `0`, `1` or `2`; default `2`.
-To control the precision based on the humidity value set it to e.g. `{80: 0, 10: 1}`,
-when humidity >= 80 precision will be 0, when humidity >= 10 precision will be 1.
+### Temperature (numeric)
+Measured temperature value.
+Value can be found in the published state on the `temperature` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+The unit of this value is `°C`.
 
+### Humidity (numeric)
+Measured relative humidity.
+Value can be found in the published state on the `humidity` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+The unit of this value is `%`.
 
-* `pressure_precision`: Controls the precision of `pressure` values, e.g. `0` or `1`; default `1`.
-To control the precision based on the pressure value set it to e.g. `{1000: 0, 100: 1}`,
-when pressure >= 1000 precision will be 0, when pressure >= 100 precision will be 1.
-* `pressure_calibration`: Allows to manually calibrate pressure values,
-e.g. `1` would add 1 to the pressure reported by the device; default `0`.
+### Pressure (numeric)
+The measured atmospheric pressure.
+Value can be found in the published state on the `pressure` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+The unit of this value is `hPa`.
 
+### Illuminance (numeric)
+Raw measured illuminance.
+Value can be found in the published state on the `illuminance` property.
+To read (`/get`) the value publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/get` with payload `{"illuminance": ""}`.
+It's not possible to write (`/set`) this value.
 
-## Manual Home Assistant configuration
-Although Home Assistant integration through [MQTT discovery](../integration/home_assistant) is preferred,
-manual integration is possible with the following configuration:
+### Illuminance_lux (numeric)
+Measured illuminance in lux.
+Value can be found in the published state on the `illuminance_lux` property.
+To read (`/get`) the value publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/get` with payload `{"illuminance_lux": ""}`.
+It's not possible to write (`/set`) this value.
+The unit of this value is `lx`.
 
+### Occupancy (binary)
+Indicates whether the device detected occupancy.
+Value can be found in the published state on the `occupancy` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+If value equals `true` occupancy is ON, if `false` OFF.
 
-{% raw %}
-```yaml
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    unit_of_measurement: "%"
-    device_class: "battery"
-    value_template: "{{ value_json.battery }}"
+### Switch 
+The current state of this switch is in the published state under the `state` property (value is `ON` or `OFF`).
+To control this switch publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/set` with payload `{"state": "ON"}`, `{"state": "OFF"}` or `{"state": "TOGGLE"}`.
+To read the current state of this switch publish a message to topic `zigbee2mqtt/FRIENDLY_NAME/get` with payload `{"state": ""}`.
 
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    unit_of_measurement: "°C"
-    device_class: "temperature"
-    value_template: "{{ value_json.temperature }}"
-
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    unit_of_measurement: "%"
-    device_class: "humidity"
-    value_template: "{{ value_json.humidity }}"
-
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    unit_of_measurement: "hPa"
-    device_class: "pressure"
-    value_template: "{{ value_json.pressure }}"
-
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    unit_of_measurement: "-"
-    device_class: "illuminance"
-    value_template: "{{ value_json.illuminance }}"
-
-binary_sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    payload_on: true
-    payload_off: false
-    value_template: "{{ value_json.occupancy }}"
-    device_class: "motion"
-
-switch:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    payload_off: "OFF"
-    payload_on: "ON"
-    value_template: "{{ value_json.state }}"
-    command_topic: "zigbee2mqtt/<FRIENDLY_NAME>/set"
-
-sensor:
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/<FRIENDLY_NAME>"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    icon: "mdi:signal"
-    unit_of_measurement: "lqi"
-    value_template: "{{ value_json.linkquality }}"
-```
-{% endraw %}
-
+### Linkquality (numeric)
+Link quality (signal strength).
+Value can be found in the published state on the `linkquality` property.
+It's not possible to read (`/get`) or write (`/set`) this value.
+The minimal value is `0` and the maximum value is `255`.
+The unit of this value is `lqi`.
 
